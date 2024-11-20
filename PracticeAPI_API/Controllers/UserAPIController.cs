@@ -25,7 +25,7 @@ namespace PracticeAPI_API.Controllers
         }
 
         [HttpGet("id", Name = "GetUser")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UserDto> GetUser(int id)
@@ -45,6 +45,9 @@ namespace PracticeAPI_API.Controllers
             return Ok(villa);
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UserDto> CreateUser([FromBody] UserDto userDto)
         {
             ModelState.AddModelError("", ""); //--- Custom Validation
@@ -60,6 +63,25 @@ namespace PracticeAPI_API.Controllers
             }
 
             return CreatedAtRoute("GetUser", new {id = userDto.Id}, userDto);
+        }
+
+        [HttpDelete("id")]
+        public IActionResult DeleteUser(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var users = new List<UserDto>();
+            var user = new UserDto();
+            if (users == null)
+            {
+                return NotFound();
+            }
+            users.Remove(user);
+            return NoContent();
+
         }
     }
 
