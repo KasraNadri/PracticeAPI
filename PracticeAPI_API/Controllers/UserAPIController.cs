@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PracticeAPI_API.Models;
 using PracticeAPI_API.Models.Dto;
 
 namespace PracticeAPI_API.Controllers
@@ -9,9 +8,9 @@ namespace PracticeAPI_API.Controllers
     public class UserAPIController : ControllerBase
     {
         [HttpGet]
-        public List<UserDto> GetUsers()
+        public ActionResult<List<UserDto>> GetUsers()
         {
-            return new List<UserDto>
+            var villaList =  new List<UserDto>
             {
                 new UserDto
                 {
@@ -22,6 +21,47 @@ namespace PracticeAPI_API.Controllers
                     Id = 2, FirstName = "Mohammad", LastName = "Ahmadi"
                 }
             };
+            return Ok(villaList);
+        }
+
+        [HttpGet("id", Name = "GetUser")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<UserDto> GetUser(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var villa =  new UserDto { Id = 1, FirstName = "Kasra", LastName = "Nadri" };
+
+            if (villa == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(villa);
+        }
+
+        public ActionResult<UserDto> CreateUser([FromBody] UserDto userDto)
+        {
+            ModelState.AddModelError("", ""); //--- Custom Validation
+
+            if (userDto == null)
+            {
+                return BadRequest(userDto);    
+            }
+
+            if (userDto.Id > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return CreatedAtRoute("GetUser", new {id = userDto.Id}, userDto);
         }
     }
+
+   
 }
