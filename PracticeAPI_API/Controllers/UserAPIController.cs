@@ -65,6 +65,8 @@ namespace PracticeAPI_API.Controllers
             return CreatedAtRoute("GetUser", new {id = userDto.Id}, userDto);
         }
 
+        //--------------------------------------------------------------------
+
         [HttpDelete("id")]
         public IActionResult DeleteUser(int id)
         {
@@ -82,6 +84,21 @@ namespace PracticeAPI_API.Controllers
             users.Remove(user);
             return NoContent();
 
+        }
+
+        //--------------------------------------------------------------------
+
+        [HttpPut("id", Name = "UpdateUser")]
+        public IActionResult UpdateUser(int id, [FromBody] UserDto userDto)
+        {
+            if (userDto == null || id != userDto.Id)
+            {
+                return BadRequest();
+            }
+
+            //----update functionality
+
+            return NoContent();
         }
     }
 

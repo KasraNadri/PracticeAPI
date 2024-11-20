@@ -13,5 +13,8 @@ namespace PracticeAPI_API.Models.Dto
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
+
+        public string Email { get; set; }
+
     }
 }
